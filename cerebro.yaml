@@ -1,0 +1,24 @@
+---
+- name: cerebro docker install and configuration
+  connection: smart
+  hosts: pipl
+  remote_user: admin
+  become: yes
+
+  tasks:
+    - name: create a configuration file
+      copy:
+        src: "files/cerebro/"
+        dest: "/tmp/cerebro"
+        mode: '0644'
+
+    - name: Start cerebro docker
+      docker_container:
+         name: cerebro
+         image: yannart/cerebro:latest
+         hostname: cerebro
+         state: started
+         networks:
+         - name: test_env
+         volumes:
+         - /tmp/cerebro/application.conf:/opt/cerebro/conf/application.conf:ro

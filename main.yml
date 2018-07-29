@@ -1,0 +1,7 @@
+- import_playbook: docker_install.yaml
+- import_playbook: elasticsearch.yaml
+- import_playbook: cerebro.yaml
+- import_playbook: kibana.yaml
+- import_playbook: logstash.yaml
+- import_playbook: filebeat.yaml
+- import_playbook: nginx.yaml

@@ -1,0 +1,25 @@
+---
+- name: Staring docker ELK components
+  connection: smart
+  hosts: pipl
+  remote_user: admin
+  become: yes
+
+  tasks:
+    - name: build filebeat configuration
+      copy:
+        src: "files/filebeat/"
+        dest: "/tmp/filebeat"
+        mode: '0644'
+
+    - name: Start Filebeat container
+      docker_container:
+        image: docker.elastic.co/beats/filebeat:6.2.4
+        name: filebeat
+        hostname: filebeat
+        volumes:
+        - /tmp/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+        networks:
+         - name: test_env
+        restart_policy: always
+        state: started

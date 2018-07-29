@@ -1,0 +1,25 @@
+---
+- name: Staring docker ELK components
+  connection: smart
+  hosts: pipl
+  remote_user: admin
+  become: yes
+
+  tasks:
+    - name: create a kibana configuration file
+      copy:
+        src: "files/kibana/"
+        dest: "/tmp/kibana"
+        mode: '0644'
+
+    - name: Start kibana container
+      docker_container:
+        image: kibana:latest
+        name: kibana
+        hostname: kibana
+        networks:
+         - name: test_env
+        volumes:
+        - /tmp/kibana/kibana.yml:/etc/kibana/kibana.yml:ro
+        restart_policy: always
+        state: started

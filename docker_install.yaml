@@ -1,0 +1,54 @@
+---
+- name: Installing docker on VM
+  connection: smart
+  hosts: pipl
+  remote_user: admin
+  become: yes
+
+  tasks:
+    - name: Install pre-requisits
+      yum: 
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - yum-utils
+        - device-mapper-persistent-data 
+        - lvm2
+        - python-setuptools
+
+    - name: Install Pypi
+      easy_install: 
+        name: pip
+    
+    - name: Install docker-py
+      pip: 
+        name: docker-py
+
+    - name: Import Docker CE repository gpg key
+      rpm_key:
+        key: https://download.docker.com/linux/centos/gpg
+        state: present
+    
+    - name: Add Docker CE repository
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        force: yes
+        owner: root
+        group: root
+        mode: 0644
+    
+    - name: Install Docker CE
+      yum:
+        name: docker-ce
+        state: present
+        update_cache: yes
+    
+    - name: Make sure Docker is running
+      service: 
+        name: docker
+        state: running
+
+    - name: Create a network
+      docker_network:
+        name: test_env

@@ -1,0 +1,17 @@
+---
+- name: Elasticsearch docker install and configuration
+  connection: smart
+  hosts: pipl
+  remote_user: admin
+  become: yes
+
+  tasks:
+    - name: Start elasticsearch container
+      docker_container:
+        image: elasticsearch:latest
+        name: elasticsearch
+        hostname: elasticsearch
+        networks:
+         - name: test_env
+        restart_policy: always
+        state: started
