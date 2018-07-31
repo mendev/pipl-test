@@ -10,7 +10,7 @@
       copy:
         src: "files/logstash/"
         dest: "/tmp/logstash"
-        mode: '0644'
+        mode: '0777'
 
     - name: Start Logstash container
       docker_container:

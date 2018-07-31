@@ -16,7 +16,6 @@
       docker_container:
          name: nginx
          image: nginx
-         state: started
          expose:
          - 80:80
          ports:
@@ -25,3 +24,6 @@
          - name: test_env
          volumes:
          - /tmp/nginx:/etc/nginx/conf.d/:ro
+         restart_policy: always
+         state: started
+         

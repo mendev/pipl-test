@@ -1,5 +1,5 @@
 ---
-- name: Staring docker ELK components
+- name: Staring filebeat docker 
   connection: smart
   hosts: pipl
   remote_user: admin
@@ -17,8 +17,13 @@
         image: docker.elastic.co/beats/filebeat:6.2.4
         name: filebeat
         hostname: filebeat
+        user: root
+        log_driver: json-file
+        log_options:
+          tag: "filebeat"
         volumes:
         - /tmp/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+        - /var/lib/docker/containers:/hostfs/var/lib/docker/containers:rw
         networks:
          - name: test_env
         restart_policy: always

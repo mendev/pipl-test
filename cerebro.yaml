@@ -17,8 +17,9 @@
          name: cerebro
          image: yannart/cerebro:latest
          hostname: cerebro
-         state: started
          networks:
          - name: test_env
          volumes:
          - /tmp/cerebro/application.conf:/opt/cerebro/conf/application.conf:ro
+         restart_policy: always
+         state: started
